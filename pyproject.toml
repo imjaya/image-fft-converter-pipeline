@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "image_fft_converter_pipeline"
+description = "A pipeline to convert PNG images to their 2D FFT representation using AWS Lambda, S3, and ECR."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["fft", "image processing", "aws", "lambda", "s3", "ecr"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",  # Assuming MIT, update if different
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
+  "numpy",
+  "Pillow",
+  "boto3",
+]
+# dynamic = ["version"] # If you use setuptools-scm for versioning from git
+
+# If your actual code is in a subdirectory (e.g., src/image_fft_converter_pipeline)
+# [tool.setuptools]
+# package-dir = {"" = "src"} # Or your source directory
+# packages = find:
+
+# If your code is directly in the root (e.g., fft_tool.py, lambda_function.py are top-level modules)
+# You might not need explicit package discovery if they are treated as scripts or simple modules.
+# For a more structured package, consider moving them into a subdirectory.
+
+# [tool.setuptools.dynamic]
+# version = { file = "VERSION" } # If you have a VERSION file
+
+[tool.black]
+line-length = 79
+target-version = ['py38', 'py39', 'py310', 'py311']
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+line_length = 88
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0 # Changed from 2 to 0 for more standard black compatibility
+use_parentheses = true
+ensure_newline_before_comments = true
+float_to_top = true
+
+[tool.pytest.ini_options]
+log_format = "%(asctime)s [%(levelname)s] %(message)s"
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_cli_level = "INFO"
+minversion = "6.0"
+addopts = "-ra -q --import-mode=importlib"
+testpaths = ["tests"]
+log_cli = true
+pythonpath = ["."]

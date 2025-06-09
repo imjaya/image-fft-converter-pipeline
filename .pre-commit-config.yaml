@@ -1,0 +1,118 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: check-xml
+      - id: check-vcs-permalinks
+      - id: end-of-file-fixer
+      - id: forbid-new-submodules
+      - id: fix-encoding-pragma
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: no-commit-to-branch
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        exclude: CHANGELOG.md
+      - id: detect-aws-credentials
+        args: ["--allow-missing-credentials"]
+      - id: detect-private-key
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-check-blanket-type-ignore
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: python-use-type-annotations
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+      - id: blacken-docs
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        additional_dependencies:
+          - tomli
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-black
+          - flake8-docstrings
+          - flake8-isort
+          - tomli
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages: [push]
+  - repo: https://github.com/roy-ht/pre-commit-jupyter
+    rev: v1.2.1
+    hooks:
+      - id: jupyter-notebook-cleanup
+        args:
+          - --remove-kernel-metadata
+  - repo: https://github.com/MisoRobotics/auto-smart-commit
+    rev: v1.0.5
+    hooks:
+      - id: auto-smart-commit
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+  - repo: https://github.com/AleksaC/hadolint-py
+    rev: v2.12.0.3
+    hooks:
+      - id: hadolint
+        args:
+          [
+            -t,
+            warning,
+            --ignore,
+            DL3013,
+            --ignore,
+            DL3008,
+            --ignore,
+            DL3007,
+            --ignore,
+            DL3018,
+            --ignore,
+            DL3042,
+          ]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          [types-PyYAML==5.4.12, types-requests==2.32.0.20240712]
+        args: [--strict, --ignore-missing-imports, --no-namespace-packages]
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.13
+    hooks:
+      - id: cmake-format
+      - id: cmake-lint
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3

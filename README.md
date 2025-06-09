@@ -3,6 +3,14 @@
 This repository contains a simple tool and infrastructure to convert PNG images
 into their 2‑D Fast Fourier Transform (FFT) representations.
 
+## Architecture
+
+The following diagram illustrates the architecture of the image processing pipeline:
+
+![Architecture Diagram](docs/architecture.png)
+
+(The PlantUML source for this diagram is in `docs/architecture.puml`.)
+
 ## Project Structure
 
 ```

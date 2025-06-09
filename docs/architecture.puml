@@ -1,0 +1,58 @@
+@startuml
+!theme materia
+
+title Image FFT Converter Pipeline Architecture
+
+actor User as U
+
+cloud "AWS" {
+    node "Amazon S3" as S3 {
+        [S3 Bucket: image-bucket\nPrefixes: input/, output/] as S3_Bucket
+    }
+
+    node "Amazon ECR" as ECR {
+        [ECR Repo:\nfft-tool-repository] as ECR_Repo
+    }
+
+    node "AWS Lambda" as Lambda {
+        [Lambda Function:\nFFT Processor] as Lambda_Func
+    }
+
+    node "IAM" as IAM {
+        [Lambda Execution Role] as Lambda_Role
+    }
+
+    node "CloudWatch Logs" as CW
+}
+
+package "Development & Deployment" {
+    artifact "Python FFT Tool" as FFT_Tool
+    file "Dockerfile" as Dockerfile
+    file "Terraform IaC" as TF_Code
+}
+
+' Workflow
+U --> S3_Bucket : 1. Upload PNG to\ninput/ prefix
+S3_Bucket --> Lambda_Func : 2. Triggers Lambda (S3 Event)
+
+Lambda_Func --> ECR_Repo : 3. Pull Docker image
+Lambda_Func --> S3_Bucket : 4. Read image from input/
+Lambda_Func --> Lambda_Func : 5. Run 2D FFT on image
+Lambda_Func --> S3_Bucket : 6. Write result to output/
+
+' IAM Permissions
+Lambda_Func --> Lambda_Role : Assume Role
+Lambda_Role --> S3 : S3 Read/Write Access
+Lambda_Role --> ECR : ECR Pull Access
+Lambda_Role --> CW : Logging Access
+
+' Deployment
+FFT_Tool --> Dockerfile : Containerized via
+Dockerfile --> ECR_Repo : Built & pushed
+
+TF_Code --> S3 : Provisions S3 bucket
+TF_Code --> ECR : Provisions ECR repo
+TF_Code --> Lambda : Deploys Lambda function
+TF_Code --> IAM : Creates IAM role
+
+@enduml
